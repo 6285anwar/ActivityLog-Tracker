@@ -1,0 +1,209 @@
+{%extends 'admin_index.html'%}
+{%load static%}
+{%block content%}
+
+<div class="col-lg-12 grid-margin transparent">
+  <div class="row">
+    <div class="col-md-3 mb-4 stretch-card transparent">
+      <div class="card card-tale">
+        <div class="card-body">
+          <p class="mb-4">Total Activities </p>
+          <i class="ti-files fs-30 "></i>
+          <p class="fs-30 mb-2 float-right">{{activitycount}}</p>
+          <p></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-4 stretch-card transparent">
+      <div class="card card-dark-blue">
+        <div class="card-body">
+          <p class="mb-4">Follow up </p>
+          <i class="ti-comments  fs-30 "></i>
+          <p class="fs-30 mb-2 float-right">{{followupcount}}</p>
+          <p></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-4 stretch-card transparent">
+      <div class="card card-light-blue">
+        <div class="card-body">
+          <p class="mb-4">Signed up </p>
+          <i class="ti-check-box  fs-30 "></i>
+          <p class="fs-30 mb-2 float-right">{{signedupcount}}</p>
+          <p></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-4 stretch-card transparent">
+      <div class="card card-light-danger">
+        <div class="card-body">
+          <p class="mb-4">Not Intrested</p>
+          <i class="ti-close fs-30"></i>
+          <p class="fs-30 mb-2 float-right">{{notintrest}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3">
+              <h6>Executive Name</h6>
+              <select class="form-control" type="text" id="managersearch" title="Type in a name">
+                <option value="All">All</option>
+                {% for i in exicutives %}
+                <option value="{{i.name}}">
+                  {{i.name}}
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-3">
+              <h6>Stage</h6>
+              <select class="form-control" type="text" id="statussearch" title="Type in a name">
+                <option value="">All</option>
+                <option value="SignUp">SignUp</option>
+                <option value="Follow Up">Follow Up</option>
+                <option value="Not intrested">Not intrested</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <h6>Date from</h6>
+              <input type="date" class="form-control" id="datefilterfrom"
+                  data-date-split-input="true" />
+          </div>
+          <div class="col-md-3">
+              <h6>Date to</h6>
+              <input type="date" class="form-control" id="datefilterto"
+                  data-date-split-input="true" />
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h1 class="card-title">Activity Log</h1>
+          <h4 class=" float-right">
+            </p>
+          </h4>
+          </p>
+          <br>
+          <br>
+
+          <div class="table-responsive datatable">
+            <table class="table table-hover card-table table-vcenter text-nowrap" id="dtBasicExample">
+              <thead>
+                <tr class="text-uppercase fw-bolder">
+
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Executive Name</th>
+                  <th>Business Name</th>
+                  <th>Type of Business</th>
+                  <th>Location</th>
+                  <th>Met Person Name</th>
+                  <th>Designation</th>
+                  <th>Phone Number</th>
+                  <th>Stage</th>
+                  <th>Next Meeting Date</th>
+                  <th>Remarks</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for i in activity %}
+                <tr>
+
+                  <td>{{i.date|date:"d-m-Y"}}</td>
+                  <td>{{i.time}}</td>
+                  <td>{{i.user.name}}</td>
+                  <td>{{i.business}}</td>
+                  <td>{{i.typeofbusiness}}</td>
+                  <td>{{i.location}}</td>
+                  <td>{{i.metpersonname}}</td>
+                  <td>{{i.designation}}</td>
+                  <td>{{i.phone}}</td>
+                  <td>{{i.stage}}</td>
+                  <td>{{i.nextmeetingdate|date:"d-m-Y"}}</td>
+                  <td>{{i.remark}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+
+  <script type="text/javascript" src="{% static 'js/manage_property.js' %}"></script>
+  <script>
+    $('.table-responsive').on('show.bs.dropdown', function () {
+      $('.table-responsive').css("overflow", "inherit");
+    });
+
+    $('.table-responsive').on('hide.bs.dropdown', function () {
+      $('.table-responsive').css("overflow", "auto");
+    })
+  </script>
+  <script>
+    function filterRows() {
+      var from = $("#datefilterfrom").val();
+      var to = $("#datefilterto").val();
+
+      if (!from && !to) {
+        // no value for from and to
+        return;
+      }
+
+      from = from || "1970-01-01"; // default from to a old date if it is not set
+      to = to || "2999-12-31";
+
+      var dateFrom = moment(from);
+      var dateTo = moment(to);
+
+      $("#dtBasicExample tr").each(function (i, tr) {
+        var val = $(tr).find("td:nth-child(1)").text();
+        var dateVal = moment(val, "DD/MM/YYYY");
+        var visible = dateVal.isBetween(dateFrom, dateTo, null, [])
+          ? ""
+          : "none"; // [] for inclusive
+        $(tr).css("display", visible);
+      });
+    }
+
+    $("#datefilterfrom").on("change", filterRows);
+    $("#datefilterto").on("change", filterRows);
+  </script>
+
+  <script>
+    $(document).ready(function () {
+      var table = $("#dtBasicExample").DataTable();
+
+      $("#myInput").on("change", function () {
+        table.columns(3).search(this.value).draw();
+      });
+
+      $("#managersearch").on("change", function () {
+        table.columns(2).search(this.value).draw();
+      });
+      $("#statussearch").on("change", function () {
+        table.columns(9).search(this.value).draw();
+      });
+    });
+  </script>
+
+</div>
+{% endblock %}

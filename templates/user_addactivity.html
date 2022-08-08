@@ -1,0 +1,155 @@
+{%extends 'user_index.html'%}
+{%load static%}
+{%block content%}
+
+<div class="row">
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Activity Log</h4>
+
+                <form class="forms-sample" action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="exampleInputName1">Business Name</label>
+                        <input type="text" class="form-control" id="exampleInputName1" placeholder="business Name"
+                            name="bn" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName1">Type of Business</label>
+                        <select class="form-control" style="width: 100%; height:50px;" name="tob" required>
+                            <option class="">--select--</option>
+                            <option value="Restaurant">Restaurant</option>
+                            <option value="Hotel">Hotel</option>
+                            <option value="Salon/Spa">Salon/Spa</option>
+                            <option value="Beauty Parlour">Beauty Parlour</option>
+                            <option value="Dental Clinic">Dental Clinic</option>
+                            <option value="Car Spa">Car Spa</option>
+                            <option value="Education Institute">Education Institute</option>
+                            <option value="Furniture Shop">Furniture Shop</option>
+                            <option value="Textile Shope">Textiles Shope</option>
+                            <option value="Supermarket">Supermarket</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName1">Location</label>
+                        <input type="text" class="form-control" id="exampleInputName1" placeholder="Location"
+                            name="l" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName1">Met Person Name</label>
+                        <input type="text" class="form-control" id="exampleInputName1" placeholder="Met Person Name"
+                            name="mpn" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName1">Designation</label>
+                        <select class="form-control" style="width: 100%; height:50px;" name="d" required>
+                            <option class="">--select--</option>
+                            <option value="Owner">Owner</option>
+                            <option value="Manager">Manager</option>
+                            <option value="Receptionist">Receptionist</option>
+                            <option value="MD">MD</option>
+                            <option value="Staff">Staff</option>
+                            <option value="GM">GM</option>
+                            <option value="OM">OM</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName1">Phone Number</label>
+                        <input type="text" class="form-control" id="exampleInputName1" placeholder="Phone Number" required
+                            name="pn" />
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName1">Stage</label>
+                        <select class="form-control" style="width: 100%; height:50px;" name="s" required onchange="yesnoCheck(this);">
+                            <option class="">--select--</option>
+                            <option value="SignUp">SignUp</option>
+                            <option value="Not intrested">Not intrested</option>
+                            <option value="Proposal Sharing">Proposal Sharing</option>
+                            <option value="Follow Up">Follow Up</option>
+                            <option value="Call Back">Call Back</option>
+                            <option value="Connected Person not Avilable">Connected Person not Avilable</option>
+
+
+                        </select>
+                    </div>
+                    <div class="form-group" id="nxtdate" style="display: none;">
+                        <label for="exampleInputName1">Next Meeting Date</label>
+                        <input type="date" class="form-control " id="date_picker" placeholder="date" name="nmd"  />
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName1">Remarks</label>
+                        <input type="text" class="form-control" id="exampleInputName1" placeholder="Remarks" name="r" required />
+                    </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<button type="submit" class="btn btn-primary me-2"> Submit </button>
+
+</form>
+</div>
+</div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js"></script>
+
+<script language="javascript">
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = today.getFullYear();
+
+    today = yyyy + '-' + mm + '-' + dd;
+    $('#date_picker').attr('min', today);
+</script>
+
+<script>
+ function getDate() {
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth()+1; //January is 0!
+  var yyyy = today.getFullYear();
+
+  if(dd<10) {
+      dd = '0'+dd
+  } 
+
+  if(mm<10) {
+      mm = '0'+mm
+  } 
+
+  today = yyyy + '/' + mm + '/' + dd;
+  console.log(today);
+  document.getElementById("date").value = today;
+}
+
+
+window.onload = function() {
+  getDate();
+};
+</script>
+
+
+<script>
+    function yesnoCheck(that) {
+        if (that.value == "Proposal Sharing" || that.value == "Call Back" || that.value == "Connected Person not Avilable") {
+            
+            document.getElementById("nxtdate").style.display = "block";
+        } else {
+            document.getElementById("nxtdate").style.display = "none";
+            
+        }
+    }</script>
+
+
+
+
+{% endblock %}
